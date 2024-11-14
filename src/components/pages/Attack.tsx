@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchGetActionsAtacker, fetchGetWepones, fetchLaunch } from '../../redux/slices/userSlice';
 import WeaponItem from './WeponeItem';
 import ActionItem from './ActionItem';
+import { socket } from '../../main';
 
 export default function Attack() {
   const dispatch = useAppDispatch();
@@ -11,6 +12,21 @@ export default function Attack() {
   const navigate = useNavigate();
   const [selectedArea, setSelectedArea] = useState("center");
   const [selectedWeapon, setSelectedWeapon] = useState("");
+
+
+  useEffect(() => {
+    const handleNewAttack = () => {
+      dispatch(fetchGetActionsAtacker());
+      dispatch(fetchGetWepones());
+      console.log("intersepted");
+    };
+
+    socket.on("intersepted", handleNewAttack);
+
+    return () => {
+      socket.off("newAttack", handleNewAttack);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     console.log("Updated user in component", user);

@@ -2,12 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
 import { fetchGetActionsDefencer, fetchGetWepones, fetchIntersepted } from '../../redux/slices/userSlice';
+import { Socket } from 'socket.io-client';
+import { socket } from '../../main';
 
 export default function Defence() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const [defendedActions, setDefendedActions] = useState([]);
+
+  useEffect(() => {
+    const handleNewAttack = () => {
+      dispatch(fetchGetActionsDefencer(user!.area));
+      dispatch(fetchGetWepones());
+      console.log("newAttack");
+    };
+
+    socket.on("newAttack", handleNewAttack);
+    socket.on("intersepted",()=>       dispatch(fetchGetActionsDefencer(user!.area)));
+
+    return () => {
+      socket.off("newAttack", handleNewAttack);
+    };
+  }, [dispatch, user?.area]);
+
+  useEffect(() => {
+    console.log("Updated user in component", user);
+  }, [user]);
 
   useEffect(() => {
     console.log("Updated user in component", user);
@@ -35,23 +56,6 @@ export default function Defence() {
     fetchData();
   }, [dispatch, user?._id, user?.organization, navigate]);
 
-  const checkInterception = (actionName: string) => {
-    if(!user?.wepone)
-    {
-      console.log("vghh");
-      
-      return
-    }
-    const possibleDefenses = user?.wepone.filter(wepone => wepone?.amount > 0 && wepone?.wepone === actionName);
-    return possibleDefenses.length > 0;
-  };
-
-  // פונקציה של יירוט, תוכל להוסיף פונקציה שתקרא ל-API אם נדרש
-  // const interceptAction = (actionName: string) => {
-  //   console.log(`Intercepting action: ${actionName}`);
-  //   // כאן יכול להיכנס הקוד לביצוע היירוט לפי הנתונים שלך (לדוג' הוזרת לפונקציה API או state)
-  //   setDefendedActions(prev => [...prev, actionName]);
-  // };
 
   return (
     <div>
