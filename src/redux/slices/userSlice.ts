@@ -171,6 +171,33 @@ export const fetchGetActionsAtacker = createAsyncThunk(
     return thunkApi.rejectWithValue("Failed to fetch weapons data");
   }
 });
+export const fetchGetActionsDefencer = createAsyncThunk(
+  "user/attack/getAttacks/Defencer", async (area:string, thunkApi) => {
+  try {
+    const token = localStorage.getItem("Authorization");
+    if (!token) {
+      return thunkApi.rejectWithValue("No authorization token found");
+    }
+    const resAttacks = await fetch(`http://localhost:2222/api/attack/${area}`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+
+    if (!resAttacks.ok) {
+      return thunkApi.rejectWithValue("Failed to fetch attacks");
+    }
+
+    const attacksData = await resAttacks.json();
+    console.log("data action", attacksData);
+    return attacksData;
+  } catch (err) {
+    console.error("Error during weapons fetch:", err);
+    return thunkApi.rejectWithValue("Failed to fetch weapons data");
+  }
+});
 export const fetchLaunch = createAsyncThunk("user/attack/lunch", async (attack: { wepone: string; area: string }, thunkApi) => {
   try {
     const token = localStorage.getItem("Authorization");
@@ -182,6 +209,37 @@ export const fetchLaunch = createAsyncThunk("user/attack/lunch", async (attack: 
       headers: {
         "Content-Type": "application/json",
         Authorization: token, // אין צורך ב-template literal כאן
+      },
+      body: JSON.stringify(attack),
+    });
+
+    if (!res.ok) {
+      return thunkApi.rejectWithValue("Failed to fetch weapons");
+    }
+
+    const launchData = await res.json();
+
+    console.log(launchData);
+    return launchData;
+    // return launchData
+  } catch (err) {
+    console.error("Error during weapons fetch:", err);
+    return thunkApi.rejectWithValue("Failed to fetch weapons data");
+  }
+});
+export const fetchIntersepted = createAsyncThunk("user/defence/lunch/ewre", async (attack: { wepone: string; attackID: string }, thunkApi) => {
+  try {
+    const token = localStorage.getItem("Authorization");
+    if (!token) {
+      return thunkApi.rejectWithValue("No authorization token found");
+    }
+    console.log(attack);
+    
+    const res = await fetch("http://localhost:2222/api/attack/defence", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
       },
       body: JSON.stringify(attack),
     });
@@ -328,8 +386,41 @@ const userSlice = createSlice({
             state.user.actions = action.payload;
           }
         }
-      });
-
+      })
+      .addCase(fetchGetActionsDefencer.fulfilled, (state, action) => {
+        state.status = DataStatus.SUCCESS;
+        state.error = null;
+        if (state.user) {
+          if (state.user.actions) {
+            state.user.actions = action.payload;
+          }
+        }
+      })
+      .addCase(fetchGetActionsDefencer.rejected, (state, action) => {
+        state.status = DataStatus.FAILED;
+        state.error = action.error as string;
+      })
+      .addCase(fetchGetActionsDefencer.pending, (state, action) => {
+        state.status = DataStatus.LOADING;
+        state.error = null;
+      })
+      .addCase(fetchIntersepted.pending, (state, action) => {
+        state.status = DataStatus.LOADING;
+        state.error = null;
+      })
+      .addCase(fetchIntersepted.rejected, (state, action) => {
+        state.status = DataStatus.FAILED;
+        state.error = action.error as string;
+      })
+      .addCase(fetchIntersepted.fulfilled, (state, action) => {
+        state.status = DataStatus.SUCCESS;
+        state.error = null;
+        if (state.user) {
+          if (state.user.actions) {
+            state.user.actions[0] = action.payload;
+          }
+        }
+      })
     // .addCase(fetchProfileUpdate.fulfilled, (state, action) => {
     //   state.user = {...state.user, ...action.payload};
     // });

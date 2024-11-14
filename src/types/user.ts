@@ -12,9 +12,13 @@ export interface IWepone {
     amount:number
 }
 
-export interface IAction extends Document {
+export interface IAction {
+    _id:string
     userID:string
     action:string
     status:string
     area:string
+    isIntersptedable:boolean
+    weponeIdForInterpeted?:string
+
 }

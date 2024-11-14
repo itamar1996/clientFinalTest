@@ -62,10 +62,10 @@ export default function Attack() {
           <label>
             אזור:
             <select value={selectedArea} onChange={(e) => setSelectedArea(e.target.value)}>
-              <option value="center">מרכז</option>
-              <option value="north">צפון</option>
-              <option value="south">דרום</option>
-              <option value="west-rank">מערב</option>
+              <option value="Center">מרכז</option>
+              <option value="North">צפון</option>
+              <option value="South">דרום</option>
+              <option value="West Bank">מערב</option>
             </select>
           </label>
           <label>

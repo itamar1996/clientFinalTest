@@ -7,6 +7,7 @@ import { useAppDispatch } from "./redux/store";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Attack from "./components/pages/Attack";
+import Defence from "./components/pages/Defence";
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="register" element={<Register />} />
         <Route path="/" element={<Navigate to={"/login"} />} />
         <Route path="/attack" element={<Attack />} />
+        <Route path="/defnce" element={<Defence />} />
 
       </Routes>
     </div>
