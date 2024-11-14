@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
+import { fetchLogin, fetchRegister } from "../../redux/slices/userSlice";
 
 export default function Register() {
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -11,24 +13,21 @@ export default function Register() {
   const [area, setArea] = useState("");
 
   useEffect(() => {
+    console.log("user",user);
+    
     if (user?._id) {
-      navigate("/votes");
+      if (user.organization.startsWith("IDF")) {
+        console.log("IDF");
+        if (window.location.pathname !== "/defnce") {
+          navigate("/defnce");
+        }
+      } else {
+        if (window.location.pathname !== "/attack") {
+          navigate("/attack");
+        }
+      }
     }
-  }, []);
-  const handleRegister = async () => {
-    try {
-      const res = await fetch("http://localhost:2222/api/users/register", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password ,organization,area}),
-      });
-      const data = await res.json();
-    } catch (err) {
-      console.log({ err });
-    }
-  };
+  }, [user]);
 
   return (
     <div>
@@ -42,7 +41,6 @@ export default function Register() {
         <option value="IRGC">IRGC</option>
         <option value="Houthis">Houthis</option>
       </select>
-      <button onClick={handleRegister}>Login</button>
       {organization === "IDF" && (
         <div className="area_select">
       <select onChange={(e) => setArea(e.target.value)}>
@@ -53,6 +51,7 @@ export default function Register() {
           </select>
         </div>
       )}
+      <button onClick={()=>dispatch(fetchRegister({username,password,organization,area}))}>Login</button>
     </div>
   );
 }

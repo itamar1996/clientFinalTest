@@ -11,10 +11,18 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (!user?._id) return
-    navigate('/votes')
-    console.log("user login",user);
-    
+    if (user?._id) {
+      if (user.organization.startsWith("IDF")) {
+        console.log("IDF");
+        if (window.location.pathname !== "/defnce") {
+          navigate("/defnce");
+        }
+      } else {
+        if (window.location.pathname !== "/attack") {
+          navigate("/attack");
+        }
+      }
+    }
   }, [user]);
 
   useEffect(() => {
