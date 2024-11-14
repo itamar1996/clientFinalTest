@@ -31,12 +31,9 @@ export const fetchLogin = createAsyncThunk("user/login", async (user: { username
           Authorization: `${data.token}`,
         },
       });
-      // console.log("ghjghjgh",await resWepones.json());
-      // data.wepones = await resWepones.json()
     } catch (error) {
       console.log(error);
     }
-    console.log("data", data);
     return data;
   } catch (err) {
     thunkApi.rejectWithValue("Can't login, please try again");
@@ -44,7 +41,6 @@ export const fetchLogin = createAsyncThunk("user/login", async (user: { username
 });
 export const fetchRegister = createAsyncThunk("user/register", async (user: { username: string; password: string; organization: string; area: string }, thunkApi) => {
   try {
-    // שליחת בקשת הרישום
     const res = await fetch("http://localhost:2222/api/users/register", {
       method: "post",
       headers: {
@@ -58,12 +54,9 @@ export const fetchRegister = createAsyncThunk("user/register", async (user: { us
     }
 
     const data = await res.json();
-    console.log("Registration data", data);
 
-    // שמירת ה-token ב-localStorage לאחר הרישום
     localStorage.setItem("Authorization", data.token);
 
-    // בקשת הנתונים של הנשקים
     const resWepones = await fetch("http://localhost:2222/api/attack/wepones", {
       method: "get",
       headers: {
@@ -72,10 +65,8 @@ export const fetchRegister = createAsyncThunk("user/register", async (user: { us
       },
     });
 
-    // עדכון הנתונים של הנשקים במידע שמחזירים
     data.wepones = await resWepones.json();
 
-    // בקשת הנתונים של פעולות האזור של המשתמש
     const resAttacks = await fetch(`http://localhost:2222/api/attack/${data.area}`, {
       method: "get",
       headers: {
@@ -84,7 +75,6 @@ export const fetchRegister = createAsyncThunk("user/register", async (user: { us
       },
     });
 
-    // עדכון הנתונים של הפעולות במידע שמחזירים
     data.actions = await resAttacks.json();
 
     return data;
@@ -103,12 +93,11 @@ export const fetchGetWepones = createAsyncThunk("user/attack", async (_, thunkAp
       method: "get",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token, // אין צורך ב-template literal כאן
+        Authorization: token,
       },
     });
 
     if (!res.ok) {
-      // בדיקה טובה יותר מאשר בדיקת status
       return thunkApi.rejectWithValue("Failed to fetch weapons");
     }
 
@@ -117,7 +106,6 @@ export const fetchGetWepones = createAsyncThunk("user/attack", async (_, thunkAp
     for (const weponeItem of weaponsData) {
       weponeListForUser.push({ wepone: (weponeItem as any).wepone, amount: (weponeItem as any).amount });
     }
-    console.log(weponeListForUser);
     return weponeListForUser;
     const resAttacks = await fetch(`http://localhost:2222/api/attack/${weaponsData.area}`, {
       method: "get",
@@ -133,7 +121,7 @@ export const fetchGetWepones = createAsyncThunk("user/attack", async (_, thunkAp
 
     const attacksData = await resAttacks.json();
 
-    return attacksData; // או מה שאתה רוצה להחזיר
+    return attacksData; 
   } catch (err) {
     console.error("Error during weapons fetch:", err);
     return thunkApi.rejectWithValue("Failed to fetch weapons data");
@@ -159,7 +147,6 @@ export const fetchGetActionsAtacker = createAsyncThunk(
     }
 
     const attacksData = await resAttacks.json();
-    console.log(attacksData);
     
     const attacksDataForUser = []
     for (const element of attacksData) {
@@ -191,7 +178,6 @@ export const fetchGetActionsDefencer = createAsyncThunk(
     }
 
     const attacksData = await resAttacks.json();
-    console.log("data action", attacksData);
     return attacksData;
   } catch (err) {
     console.error("Error during weapons fetch:", err);
@@ -208,7 +194,7 @@ export const fetchLaunch = createAsyncThunk("user/attack/lunch", async (attack: 
       method: "post",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token, // אין צורך ב-template literal כאן
+        Authorization: token, 
       },
       body: JSON.stringify(attack),
     });
@@ -219,9 +205,7 @@ export const fetchLaunch = createAsyncThunk("user/attack/lunch", async (attack: 
 
     const launchData = await res.json();
 
-    console.log(launchData);
     return launchData;
-    // return launchData
   } catch (err) {
     console.error("Error during weapons fetch:", err);
     return thunkApi.rejectWithValue("Failed to fetch weapons data");
@@ -229,11 +213,12 @@ export const fetchLaunch = createAsyncThunk("user/attack/lunch", async (attack: 
 });
 export const fetchIntersepted = createAsyncThunk("user/defence/lunch/ewre", async (attack: { wepone: string; attackID: string }, thunkApi) => {
   try {
+    console.log("inters",attack);
+    
     const token = localStorage.getItem("Authorization");
     if (!token) {
       return thunkApi.rejectWithValue("No authorization token found");
     }
-    console.log(attack);
     
     const res = await fetch("http://localhost:2222/api/attack/defence", {
       method: "post",
@@ -250,37 +235,13 @@ export const fetchIntersepted = createAsyncThunk("user/defence/lunch/ewre", asyn
 
     const launchData = await res.json();
 
-    console.log(launchData);
     return launchData;
-    // return launchData
   } catch (err) {
     console.error("Error during weapons fetch:", err);
     return thunkApi.rejectWithValue("Failed to fetch weapons data");
   }
 });
 
-// export const fetchProfileUpdate = createAsyncThunk(
-//   "user/profile",
-//   async (id: string, thunkApi) => {
-//     try {
-//       const res = await fetch("http://localhost:2222/api/users/profile", {
-//         method: "post",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: localStorage["Authorization"]!,
-//         },
-//         body: JSON.stringify({ id }),
-//       });
-//       if (res.status != 200) {
-//         thunkApi.rejectWithValue("Can't update profile, please try again");
-//       }
-//       const data = await res.json();
-//       return data;
-//     } catch (err) {
-//       thunkApi.rejectWithValue("Can't login, please try again");
-//     }
-//   }
-// );
 
 const userSlice = createSlice({
   name: "user",
@@ -300,7 +261,7 @@ const userSlice = createSlice({
       .addCase(fetchLogin.fulfilled, (state, action) => {
         state.status = DataStatus.SUCCESS;
         state.error = null;
-        state.user = action.payload as unknown as IUser as any;
+        state.user = action.payload as unknown as IUser as any;        
         (state.user as any).actions = [];
       })
       .addCase(fetchLogin.rejected, (state, action) => {
@@ -338,7 +299,7 @@ const userSlice = createSlice({
             ...state.user,
             wepone: action.payload as any,
           };
-          state.user = updatedUser; // כאן נעדכן את state.user מחדש
+          state.user = updatedUser;
         }
       })
       .addCase(fetchGetWepones.rejected, (state, action) => {
@@ -417,13 +378,10 @@ const userSlice = createSlice({
         state.error = null;
         if (state.user) {
           if (state.user.actions) {
-            state.user.actions[0] = action.payload;
+            state.user.actions.push (action.payload);
           }
         }
       })
-    // .addCase(fetchProfileUpdate.fulfilled, (state, action) => {
-    //   state.user = {...state.user, ...action.payload};
-    // });
   },
 });
 

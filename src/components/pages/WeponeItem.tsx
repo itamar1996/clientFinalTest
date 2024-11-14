@@ -1,4 +1,3 @@
-// WeaponItem.tsx
 import React from 'react';
 
 interface WeaponItemProps {

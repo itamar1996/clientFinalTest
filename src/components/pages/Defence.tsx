@@ -19,20 +19,12 @@ export default function Defence() {
     };
 
     socket.on("newAttack", handleNewAttack);
-    socket.on("intersepted",()=>       dispatch(fetchGetActionsDefencer(user!.area)));
 
     return () => {
       socket.off("newAttack", handleNewAttack);
     };
   }, [dispatch, user?.area]);
 
-  useEffect(() => {
-    console.log("Updated user in component", user);
-  }, [user]);
-
-  useEffect(() => {
-    console.log("Updated user in component", user);
-  }, [user]);
   useEffect(() => {
     if (!user?._id) {
       navigate('/login');
@@ -60,8 +52,6 @@ export default function Defence() {
   return (
     <div>
       <h2>Defence Actions</h2>
-      
-      {/* טבלת האיומים */}
       <table>
         <thead>
           <tr>
@@ -74,7 +64,7 @@ export default function Defence() {
           {user?.actions && user?.actions.map((action, index) => (
             <tr key={index}>
               <td>{action.action}</td>
-              <td>{action.isIntersptedable ? 'Interceptable' : 'Not Interceptable'}</td>
+              <td>{action.status}</td>
               <td>
                 {action.isIntersptedable && (
                   <button onClick={()=>dispatch(fetchIntersepted({

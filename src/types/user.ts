@@ -20,5 +20,5 @@ export interface IAction {
     area:string
     isIntersptedable:boolean
     weponeIdForInterpeted?:string
-
+    launchTime: Date;
 }

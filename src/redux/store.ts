@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./slices/userSlice";
-// import candidatesSlice from "./slices/candidatesSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
@@ -8,7 +7,6 @@ import { useSelector } from "react-redux";
 const store = configureStore({
     reducer: {
       user: userSlice.reducer,
-    //   candidates: candidatesSlice.reducer,
     },
   });
 

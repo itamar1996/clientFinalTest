@@ -13,7 +13,6 @@ export default function Register() {
   const [area, setArea] = useState("");
 
   useEffect(() => {
-    console.log("user",user);
     
     if (user?._id) {
       if (user.organization.startsWith("IDF")) {
@@ -30,19 +29,19 @@ export default function Register() {
   }, [user]);
 
   return (
-    <div>
+    <div className="form-login">
       {" "}
-      <input type="text" placeholder="User Name" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <select onChange={(e) => setOrganization(e.target.value)}>
-        <option value="IDF">IDF</option>
+      <input className="form-item" type="text" placeholder="User Name" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <input className="form-item" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <select className="form-item" onChange={(e) => setOrganization(e.target.value)}>
         <option value="Hezbollah">Hezbollah</option>
         <option value="Hamas">Hamas</option>
         <option value="IRGC">IRGC</option>
         <option value="Houthis">Houthis</option>
+        <option value="IDF">IDF</option>
       </select>
       {organization === "IDF" && (
-        <div className="area_select">
+        <div className="area_select form-item">
       <select onChange={(e) => setArea(e.target.value)}>
           <option value="center">מרכז</option>
             <option value="North">צפון</option>
@@ -51,7 +50,7 @@ export default function Register() {
           </select>
         </div>
       )}
-      <button onClick={()=>dispatch(fetchRegister({username,password,organization,area}))}>Login</button>
+      <button onClick={()=>dispatch(fetchRegister({username,password,organization,area}))}>Register</button>
     </div>
   );
 }

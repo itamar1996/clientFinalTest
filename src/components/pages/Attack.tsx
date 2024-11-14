@@ -29,10 +29,6 @@ export default function Attack() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("Updated user in component", user);
-  }, [user]);
-
-  useEffect(() => {
     if (!user?._id) {
       navigate('/login');
       return; 
@@ -72,12 +68,13 @@ export default function Attack() {
 
   return ( 
     <div>
-      <div className="attackForm">
+      <div>
         <h2>שיגור התקפה חדשה</h2>
-        <form onSubmit={handleLaunch}>
-          <label>
+        <form className="attackForm" onSubmit={handleLaunch}>
+          <label >
             אזור:
-            <select value={selectedArea} onChange={(e) => setSelectedArea(e.target.value)}>
+            <br />
+            <select className='form-item' value={selectedArea} onChange={(e) => setSelectedArea(e.target.value)}>
               <option value="Center">מרכז</option>
               <option value="North">צפון</option>
               <option value="South">דרום</option>
@@ -85,8 +82,9 @@ export default function Attack() {
             </select>
           </label>
           <label>
-            סוג השיגור:
-            <select 
+            <p>סוג שיגור</p>
+            <select  
+            className='form-item'
               value={selectedWeapon} 
               onChange={(e) => setSelectedWeapon(e.target.value)}
             >
@@ -98,7 +96,7 @@ export default function Attack() {
               ))}
             </select>
           </label>
-          <button type="submit">בצע שיגור</button>
+          <button className='form-item' type="submit">בצע שיגור</button>
         </form>
       </div>
 
