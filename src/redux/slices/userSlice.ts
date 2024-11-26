@@ -46,7 +46,7 @@ export const fetchRegister = createAsyncThunk("user/register", async (user: { us
 
     localStorage.setItem("Authorization", data.token);
 
-    const resWepones = await fetch(`https://serverfinaltest-1.onrender.comapi/attack/wepones`, {
+    const resWepones = await fetch(`https://serverfinaltest-1.onrender.com/api/attack/wepones`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
