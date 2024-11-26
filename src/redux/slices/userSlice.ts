@@ -10,7 +10,7 @@ const initialState: userState = {
 
 export const fetchLogin = createAsyncThunk("user/login", async (user: { username: string; password: string }, thunkApi) => {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/api/users/login`, {
+    const res = await fetch(`${import.meta.env.BASE_URL}/api/users/login`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export const fetchLogin = createAsyncThunk("user/login", async (user: { username
 });
 export const fetchRegister = createAsyncThunk("user/register", async (user: { username: string; password: string; organization: string; area: string }, thunkApi) => {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/api/users/register`, {
+    const res = await fetch(`${import.meta.env.BASE_URL}/api/users/register`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const fetchRegister = createAsyncThunk("user/register", async (user: { us
 
     localStorage.setItem("Authorization", data.token);
 
-    const resWepones = await fetch(`${process.env.BASE_URL}api/attack/wepones`, {
+    const resWepones = await fetch(`${import.meta.env.BASE_URL}api/attack/wepones`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const fetchRegister = createAsyncThunk("user/register", async (user: { us
 
     data.wepones = await resWepones.json();
 
-    const resAttacks = await fetch(`${process.env.BASE_URL}/api/attack/${data.area}`, {
+    const resAttacks = await fetch(`${import.meta.env.BASE_URL}/api/attack/${data.area}`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export const fetchGetWepones = createAsyncThunk("user/attack", async (_, thunkAp
     if (!token) {
       return thunkApi.rejectWithValue("No authorization token found");
     }
-    const res = await fetch(`${process.env.BASE_URL}/api/attack/wepones`, {
+    const res = await fetch(`${import.meta.env.BASE_URL}/api/attack/wepones`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -123,7 +123,7 @@ export const fetchGetActionsAtacker = createAsyncThunk(
     if (!token) {
       return thunkApi.rejectWithValue("No authorization token found");
     }
-    const resAttacks = await fetch(`${process.env.BASE_URL}/api/attack/attacks`, {
+    const resAttacks = await fetch(`${import.meta.env.BASE_URL}/api/attack/attacks`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -149,7 +149,7 @@ export const fetchGetActionsDefencer = createAsyncThunk(
     if (!token) {
       return thunkApi.rejectWithValue("No authorization token found");
     }
-    const resAttacks = await fetch(`${process.env.BASE_URL}/api/attack/${area}`, {
+    const resAttacks = await fetch(`${import.meta.env.BASE_URL}/api/attack/${area}`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -174,7 +174,7 @@ export const fetchLaunch = createAsyncThunk("user/attack/lunch", async (attack: 
     if (!token) {
       return thunkApi.rejectWithValue("No authorization token found");
     }
-    const res = await fetch(`${process.env.BASE_URL}/api/attack`, {
+    const res = await fetch(`${import.meta.env.BASE_URL}/api/attack`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -204,7 +204,7 @@ export const fetchIntersepted = createAsyncThunk("user/defence/lunch/ewre", asyn
       return thunkApi.rejectWithValue("No authorization token found");
     }
     
-    const res = await fetch(`${process.env.BASE_URL}/api/attack/defence`, {
+    const res = await fetch(`${import.meta.env.BASE_URL}/api/attack/defence`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
