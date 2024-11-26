@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
 import { fetchGetActionsDefencer, fetchGetWepones, fetchIntersepted } from '../../redux/slices/userSlice';
-import { Socket } from 'socket.io-client';
 import { socket } from '../../main';
 
 export default function Defence() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-  const [defendedActions, setDefendedActions] = useState([]);
-
   useEffect(() => {
     const handleNewAttack = () => {
       dispatch(fetchGetActionsDefencer(user!.area));

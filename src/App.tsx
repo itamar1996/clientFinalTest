@@ -1,17 +1,13 @@
-import React, { useEffect } from "react";
 import Nav from "./components/Nav";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import { useAppDispatch } from "./redux/store";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Attack from "./components/pages/Attack";
 import Defence from "./components/pages/Defence";
 
 export default function App() {
-  const dispatch = useAppDispatch();
-
   return (
     <div>
       <Nav />

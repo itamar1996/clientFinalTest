@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
-import { fetchLogin, fetchRegister } from "../../redux/slices/userSlice";
+import { fetchRegister } from "../../redux/slices/userSlice";
 
 export default function Register() {
   const dispatch = useAppDispatch();

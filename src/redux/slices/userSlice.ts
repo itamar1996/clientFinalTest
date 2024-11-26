@@ -23,17 +23,6 @@ export const fetchLogin = createAsyncThunk("user/login", async (user: { username
     }
     const data = await res.json();
     localStorage.setItem("Authorization", data.token);
-    try {
-      const resWepones = await fetch("http://localhost:2222/api/attack/wepones", {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${data.token}`,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
     return data;
   } catch (err) {
     thunkApi.rejectWithValue("Can't login, please try again");
@@ -147,11 +136,6 @@ export const fetchGetActionsAtacker = createAsyncThunk(
     }
 
     const attacksData = await resAttacks.json();
-    
-    const attacksDataForUser = []
-    for (const element of attacksData) {
-      
-    }
     return attacksData;
   } catch (err) {
     console.error("Error during weapons fetch:", err);
@@ -253,7 +237,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder: ActionReducerMapBuilder<userState>) => {
     builder
-      .addCase(fetchLogin.pending, (state, action) => {
+      .addCase(fetchLogin.pending, (state) => {
         state.status = DataStatus.LOADING;
         state.error = null;
         state.user = null;
@@ -279,12 +263,12 @@ const userSlice = createSlice({
         state.error = action.error as string;
         state.user = null;
       })
-      .addCase(fetchRegister.pending, (state, action) => {
+      .addCase(fetchRegister.pending, (state) => {
         state.status = DataStatus.LOADING;
         state.error = null;
         state.user = null;
       })
-      .addCase(fetchGetWepones.pending, (state, action) => {
+      .addCase(fetchGetWepones.pending, (state) => {
         state.status = DataStatus.LOADING;
         state.error = null;
         if (state.user) {
@@ -309,7 +293,7 @@ const userSlice = createSlice({
           state.user.wepone = null;
         }
       })
-      .addCase(fetchLaunch.pending, (state, action) => {
+      .addCase(fetchLaunch.pending, (state) => {
         state.status = DataStatus.LOADING;
         state.error = null;
       })
@@ -331,7 +315,7 @@ const userSlice = createSlice({
         state.status = DataStatus.FAILED;
         state.error = action.error as string;
       })
-      .addCase(fetchGetActionsAtacker.pending, (state, action) => {
+      .addCase(fetchGetActionsAtacker.pending, (state) => {
         state.status = DataStatus.LOADING;
         state.error = null;
       })
@@ -361,11 +345,11 @@ const userSlice = createSlice({
         state.status = DataStatus.FAILED;
         state.error = action.error as string;
       })
-      .addCase(fetchGetActionsDefencer.pending, (state, action) => {
+      .addCase(fetchGetActionsDefencer.pending, (state) => {
         state.status = DataStatus.LOADING;
         state.error = null;
       })
-      .addCase(fetchIntersepted.pending, (state, action) => {
+      .addCase(fetchIntersepted.pending, (state) => {
         state.status = DataStatus.LOADING;
         state.error = null;
       })
